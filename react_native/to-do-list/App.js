@@ -18,13 +18,14 @@ const { height, width } = Dimensions.get("window");
 export default class App extends React.Component {
   state = {
     newToDo: "",
-    loaderToDos: false
+    loaderToDos: false,
+    toDos: {}
   };
   componentDidMount = () => {
     this._loadToDos();
   };
   render() {
-    const { newToDo, loaderToDos } = this.state;
+    const { newToDo, loaderToDos, toDos } = this.state;
     if (!loaderToDos) {
       return <AppLoading />;
     }
@@ -61,8 +62,8 @@ export default class App extends React.Component {
     });
   };
   _addToDo = () => {
-    const { newTodo } = this.state;
-    if (newTodo !== "") {
+    const { newToDo } = this.state;
+    if (newToDo !== "") {
       this.setState(prevState => {
         const ID = uuidv1();
         const newToDoObject = {
