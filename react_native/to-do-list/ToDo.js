@@ -12,21 +12,54 @@ const { width, height } = Dimensions.get("window");
 export default class ToDo extends Component {
   state = {
     isEditing: false,
-    isCompleted: false
+    isCompleted: false,
+    toDoValue: ""
   };
   render() {
-    const { isCompleted } = this.state;
+    const { isCompleted, isEditing } = this.state;
+    const { text } = this.props;
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this._toggleCompleteToDo}>
-          <View
+        <View style={styles.colum}>
+          <TouchableOpacity onPress={this._toggleCompleteToDo}>
+            <View
+              style={[
+                styles.circle,
+                isCompleted ? styles.completedCircle : styles.unCompletedCircle
+              ]}
+            />
+          </TouchableOpacity>
+          <Text
             style={[
-              styles.circle,
-              isCompleted ? styles.completedCircle : styles.unCompletedCircle
+              styles.text,
+              isCompleted ? styles.completedText : styles.unCompletedText
             ]}
-          />
-        </TouchableOpacity>
-        <Text style={styles.text}>Hello World</Text>
+          >
+            {text}
+          </Text>
+        </View>
+        {isEditing ? (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._finishEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>✅</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._startEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>🖍</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>❌</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     );
   }
@@ -37,6 +70,18 @@ export default class ToDo extends Component {
       };
     });
   };
+  _startEditing = () => {
+    const { text } = this.props;
+    this.setState({
+      isEditing: true,
+      toDoValue: text
+    });
+  };
+  _finishEditing = () => {
+    this.setState({
+      isEditing: false
+    });
+  };
 }
 
 const styles = StyleSheet.create({
@@ -45,7 +90,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#bbb",
     borderBottomWidth: StyleSheet.hairLineWidth,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   circle: {
     width: 25,
@@ -64,5 +110,25 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 20,
     marginVertical: 20
+  },
+  completedText: {
+    color: "#bbb",
+    textDecorationLine: "line-through"
+  },
+  unCompletedText: {
+    color: "#353839"
+  },
+  colum: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: width / 2,
+    justifyContent: "space-between"
+  },
+  actions: {
+    flexDirection: "row"
+  },
+  actionContainer: {
+    marginVertical: 10,
+    marginHorizontal: 10
   }
 });
