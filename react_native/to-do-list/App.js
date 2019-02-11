@@ -45,19 +45,23 @@ export default class App extends React.Component {
             autoCorrect={false}
             onSubmitEditing={this._addToDo}
           />
-          <ScrollView contentContainerStyle={styles.toDos}>
-            {Object.values(toDos).map(toDo => (
-              <ToDo
-                key={toDo.id}
-                deleteToDo={this._deleteToDo}
-                uncompleteToDo={this._uncompleteToDo}
-                completeToDo={this._completeToDo}
-                updateToDo={this._updateToDo}
-                saveToDos={this.saveToDos}
-                {...toDo}
-              />
-            ))}
-          </ScrollView>
+          {toDos !== null && typeof toDos === "object" ? ( //오브젝트가 없을경우 빈값 출력
+            <ScrollView contentContainerStyle={styles.toDos}>
+              {Object.values(toDos).map(toDo => (
+                <ToDo
+                  key={toDo.id}
+                  deleteToDo={this._deleteToDo}
+                  uncompleteToDo={this._uncompleteToDo}
+                  completeToDo={this._completeToDo}
+                  updateToDo={this._updateToDo}
+                  saveToDos={this.saveToDos}
+                  {...toDo}
+                />
+              ))}
+            </ScrollView>
+          ) : (
+            ""
+          )}
         </View>
       </View>
     );
@@ -72,9 +76,8 @@ export default class App extends React.Component {
       const toDos = await AsyncStorage.getItem("toDos");
       const parsedToDos = JSON.parse(toDos);
       this.setState({ loaderToDos: true, toDos: parsedToDos });
-      console.log(0, toDos);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     this.setState({
       loaderToDos: true
@@ -157,7 +160,7 @@ export default class App extends React.Component {
           ...prevState.toDos,
           [id]: {
             ...prevState.toDos[id],
-            text
+            text //text:text 일 경우 한번만 작성해도 동일함.
           }
         }
       };
@@ -167,6 +170,7 @@ export default class App extends React.Component {
   };
   _saveToDos = newToDos => {
     const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newToDos));
+    console.log(newToDos);
   };
 }
 
