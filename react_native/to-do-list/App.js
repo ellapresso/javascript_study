@@ -7,7 +7,8 @@ import {
   TextInput,
   Dimensions,
   Platform,
-  ScrollView
+  ScrollView,
+  AsyncStorage
 } from "react-native";
 import { AppLoading } from "expo";
 import uuidv1 from "uuid/v1";
@@ -52,6 +53,7 @@ export default class App extends React.Component {
                 uncompleteToDo={this._uncompleteToDo}
                 completeToDo={this._completeToDo}
                 updateToDo={this._updateToDo}
+                saveToDos={this.saveToDos}
                 {...toDo}
               />
             ))}
@@ -65,7 +67,15 @@ export default class App extends React.Component {
       newToDo: text
     });
   };
-  _loadToDos = () => {
+  _loadToDos = async () => {
+    try {
+      const toDos = await AsyncStorage.getItem("toDos");
+      const parsedToDos = JSON.parse(toDos);
+      this.setState({ loaderToDos: true, toDos: parsedToDos });
+      console.log(0, toDos);
+    } catch (error) {
+      console.log(error);
+    }
     this.setState({
       loaderToDos: true
     });
@@ -91,6 +101,7 @@ export default class App extends React.Component {
             ...newToDoObject
           }
         };
+        this._saveToDos(newState.toDos);
         return { ...newState };
       });
     }
@@ -103,6 +114,7 @@ export default class App extends React.Component {
         ...prevState,
         ...toDos
       };
+      this._saveToDos(newState.toDos);
       return { ...newState };
     });
   };
@@ -118,6 +130,7 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveToDos(newState.toDos);
       return { ...newState };
     });
   };
@@ -148,8 +161,12 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveToDos(newState.toDos);
       return { ...newState };
     });
+  };
+  _saveToDos = newToDos => {
+    const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newToDos));
   };
 }
 
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     ...Platform.select({
       ios: {
-        shodowColor: "rgb(50,50,50",
+        shodowColor: "rgb(50,50,50)",
         shodowOpacity: 0.5,
         shadowRadius: 5,
         shadowOffset: {
