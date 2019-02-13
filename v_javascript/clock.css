@@ -1,7 +1,16 @@
+body {
+  background-color: peru;
+}
+
+h1 {
+  color: #fff;
+}
+
 .form,
 .greeting {
   display: none;
 }
+
 .showing {
   display: block;
 }
