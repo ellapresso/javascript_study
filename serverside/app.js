@@ -5,15 +5,15 @@ const app = express();
 
 app.locals.pretty = true;
 
-app.get("/topic", function(req, res) {
+app.get("/topic/:id", function(req, res) {
   const topics = ["Javascript ...", "Java ...", "PHP ...", "Nodejs ..."];
   const output = `
   <a href="/topic?id=0">Javascript</a><br>
   <a href="/topic?id=1">Java</a><br>
   <a href="/topic?id=2">PHP</a><br>
   <a href="/topic?id=3">Nodejs</a><br>
-  ${topics[req.query.id]}
-  `;
+  ${topics[req.params.id]}
+  `; //쿼리스트링으로 하고싶을때는 query, 시멘틱으로 하고싶을때는 params
   res.send(output); //id가 쿼리스트링에서 넘겨주는 파라미터값
 });
 
