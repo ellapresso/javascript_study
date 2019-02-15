@@ -3,8 +3,8 @@ const app = express();
 const bodyParser = require("body-parser"); //미들웨어 : post방식으로 데이터를 보낼때 body객체를 읽어들임.
 const fs = require("fs"); //  노드에서 제공하는 파일시스템을 제어할수 있는 모듈
 
-var mysql = require("mysql");
-var conn = mysql.createConnection({
+const mysql = require("mysql");
+const conn = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
   password: "mysql1234",
@@ -25,14 +25,22 @@ app.get("/", function(req, res) {
 app.set("views", "./views_mysql");
 app.set("view engine", "jade");
 
-app.get("/topic/new", function(req, res) {
-  fs.readdir("data", function(err, files) {
+app.get("/topic/add", function(req, res) {
+  const sql = "select no,title,memo from sample";
+  conn.query(sql, function(err, topics, fields) {
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");
     }
-    res.render("new", { topics: files });
+    res.render("add", { topics: topics });
   });
+  // fs.readdir("data", function(err, files) {
+  //   if (err) {
+  //     console.log(err);
+  //     res.status(500).send("Internal Server Error");
+  //   }
+  //   res.render("add", { topics: files });
+  // });
 });
 
 app.post("/topic", function(req, res) {
