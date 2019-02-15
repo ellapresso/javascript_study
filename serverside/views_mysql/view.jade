@@ -8,11 +8,11 @@ html
         ul
             each topic in topics
                 li
-                    a(href="/topic/"+topic.no)= topic.memo
+                    a(href="/topic/"+topic.no)= topic.title
         aricle 
             if topic
-                h2= title
-                = description
+                h2= topic.title
+                = topic.memo
             else
                 h2 welcome
                 |this is ...

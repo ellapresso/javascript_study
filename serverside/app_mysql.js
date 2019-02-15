@@ -50,35 +50,28 @@ app.post("/topic", function(req, res) {
 });
 
 app.get(["/topic", "/topic/:id"], function(req, res) {
-  const sql = "select no,memo from sample";
-  conn.query(sql, function(err, rows, fields) {
-    res.render("view", { topics: rows });
+  const sql = "select no,title,memo from sample";
+  conn.query(sql, function(err, topics, fields) {
+    const no = req.params.id;
+    if (err) {
+      console.log(err);
+      res.status(500).send("Internal Server Error");
+    }
+    if (no) {
+      const sql = "select * from sample where no = ?";
+      conn.query(sql, [no], function(err, topic, fields) {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Internal Server Error");
+        } else {
+          res.render("view", { topics: topics, topic: topic[0] });
+        }
+      });
+    } else {
+      res.render("view", { topics: topics });
+    }
     // res.send(rows);
   });
-  //id값이 없을때
-  // fs.readdir("data", function(err, files) {
-  //   if (err) {
-  //     console.log(err);
-  //     res.status(500).send("Internal Server Error");
-  //   }
-  //   //id값이 있을때
-  // const id = req.params.id;
-  //   if (id) {
-  //     fs.readFile("data/" + id, "utf-8", function(err, data) {
-  //       if (err) {
-  //         console.log(err);
-  //         res.status(500).send("Internal Server Error");
-  //       }
-  //       res.render("view", { topics: files, title: id, description: data });
-  //     });
-  //   } else {
-  //     res.render("view", {
-  //       topics: files,
-  //       title: "welcome",
-  //       description: "student"
-  //     });
-  //   }
-  // });
 });
 
 // app.get("/topic/:id", function(req, res) {
