@@ -8,7 +8,7 @@ html
             ul
                 each topic in topics
                     li
-                        a(href="/topic/"+topic)= topic
+                        a(href="/topic/"+topic)= topic.title
             aricle 
                 form(action="/topic" method="post")
                     P 

@@ -15,7 +15,7 @@ html
                 = topic.memo
             else
                 h2 welcome
-                |this is ...
+                | this is ...
         ul
             li
                 a(href="/topic/add") write
@@ -23,4 +23,4 @@ html
                 li
                     a(href="/topic/"+topic.no+"/edit") edit
                 li
-                    a(href="") deletex
+                    a(href="/topic/"+topic.no+"/delete") delete

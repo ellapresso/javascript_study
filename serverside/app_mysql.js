@@ -129,23 +129,34 @@ app.get(["/topic", "/topic/:id"], function(req, res) {
     } else {
       res.render("view", { topics: topics });
     }
-    // res.send(rows);
   });
 });
 
-// app.get("/topic/:id", function(req, res) {
-//   const id = req.params.id;
-//   fs.readdir("data", function(err, files) {
-//     if (err) {
-//       console.log(err);
-//       res.status(500).send("Internal Server Error");
-//     }
-//     fs.readFile("data/" + id, "utf-8", function(err, data) {
-//       if (err) {
-//         console.log(err);
-//         res.status(500).send("Internal Server Error");
-//       }
-//       res.render("view", { topics: files, title: id, description: data });
-//     });
-//   });
-// });
+app.get("/topic/:id/delete", function(req, res) {
+  const sql = "select no,title from sample";
+  const no = req.params.id;
+  conn.query(sql, function(err, topics, fields) {
+    const sql = "select * from sample where no = ? ";
+    conn.query(sql, [no], function(err, topic) {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (topic.length === 0) {
+          console.log("there is no id");
+          res.status(500).send("Internal Server Error");
+        } else {
+          res.render("delete", { topics: topics, topic: topic[0] });
+        }
+      }
+    });
+  });
+});
+
+app.post("/topic/:id/delete", function(req, res) {
+  const no = req.params.id;
+  const sql = "delete from sample where no=?";
+  conn.query(sql, [no], function(err, result) {
+    res.redirect("/topic");
+  });
+});
