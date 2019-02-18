@@ -34,16 +34,9 @@ app.get("/topic/add", function(req, res) {
     }
     res.render("add", { topics: topics });
   });
-  // fs.readdir("data", function(err, files) {
-  //   if (err) {
-  //     console.log(err);
-  //     res.status(500).send("Internal Server Error");
-  //   }
-  //   res.render("add", { topics: files });
-  // });
 });
 
-app.post("/topic", function(req, res) {
+app.post("/topic/add", function(req, res) {
   const title = req.body.title;
   const descr = req.body.description;
   fs.writeFile("data/" + title, descr, function(err) {
@@ -54,6 +47,22 @@ app.post("/topic", function(req, res) {
     }
     //에러가 없을때
     res.redirect("/topic/" + title);
+  });
+});
+
+app.post("/topic", function(req, res) {
+  const title = req.body.title;
+  const descr = req.body.description;
+  const author = req.body.author;
+  const sql = "insert into sample(title,memo) values(?,?)";
+  conn.query(sql, [title, descr], function(err, rows, fields) {
+    if (err) {
+      console.log(err);
+      //에러가 있을때
+      res.status(500).send("Internal Server Error");
+    }
+    //에러가 없을때
+    res.redirect("/topic/");
   });
 });
 
