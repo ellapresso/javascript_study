@@ -50,6 +50,48 @@ app.post("/topic/add", function(req, res) {
   });
 });
 
+app.get(["/topic/:id/edit"], function(req, res) {
+  const sql = "select no,title,memo from sample";
+  conn.query(sql, function(err, topics, fields) {
+    const no = req.params.id;
+    if (err) {
+      console.log(err);
+      res.status(500).send("Internal Server Error");
+    }
+    if (no) {
+      const sql = "select * from sample where no = ?";
+      conn.query(sql, [no], function(err, topic, fields) {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Internal Server Error");
+        } else {
+          res.render("edit", { topics: topics, topic: topic[0] });
+        }
+      });
+    } else {
+      console.log("there is no id");
+      res.status(500).send("Internal Server Error");
+    }
+  });
+});
+
+app.post("/topic/:id/edit", function(req, res) {
+  const title = req.body.title;
+  const memo = req.body.description;
+  const no = req.params.id;
+  const sql = "update sample set title=?, memo=? where no = ?";
+  conn.query(sql, [title, memo, no], function(err, result, fields) {
+    if (err) {
+      //에러가 있을때
+      console.log(fields);
+      res.status(500).send("Internal Server Error");
+    } else {
+      //에러가 없을때
+      res.redirect("/topic/" + no);
+    }
+  });
+});
+
 app.post("/topic", function(req, res) {
   const title = req.body.title;
   const descr = req.body.description;

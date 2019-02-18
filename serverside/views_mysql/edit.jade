@@ -10,17 +10,14 @@ html
                 li
                     a(href="/topic/"+topic.no)= topic.title
         aricle 
-            if topic
-                h2= topic.title
-                = topic.memo
-            else
-                h2 welcome
-                |this is ...
+          form(action="/topic/"+topic.no+"/edit" method="post")
+            P 
+              input(type="text",name="title", value =topic.title ,placeholder="title" )
+            P
+                textarea(name="description")
+                  =topic.memo
+            P
+                input(type="submit")
         ul
             li
                 a(href="/topic/add") write
-            if topic
-                li
-                    a(href="/topic/"+topic.no+"/edit") edit
-                li
-                    a(href="") deletex
