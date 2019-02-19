@@ -28,4 +28,9 @@ class MoviePostar extends Component {
     return <img src={this.props.poster} />;
   }
 }
+//위와 같은 코드. state가 없고 리턴만 있음.
+// function MoviePostar({ poster }) {
+//   return <img src={poster} alt="Movie Poster" />;
+// }
+
 export default Movie;

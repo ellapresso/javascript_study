@@ -2,67 +2,46 @@ import React, { Component } from "react";
 import "./App.css";
 import Movie from "./Movie";
 
-// const movieTitles = ["HAPPY DEATH DAY", "OLD BOY", "STAR WORLDS"];
-// const movieImages = [
-//   "https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/Adventure_Time_cast.jpg/220px-Adventure_Time_cast.jpg",
-//   "https://img1.daumcdn.net/thumb/C216x312/?fname=http://i1.daumcdn.net/svc/image/U03/sdb/579174DA0263160002",
-//   "https://pbs.twimg.com/profile_images/1082834871943258112/vf6z0ow6_400x400.jpg"
-// ];
-
 class App extends Component {
-  state = {
-    greeting: "Hola!"
-  };
+  state = {};
 
   componentDidMount() {
-    setTimeout(() => {
-      // this.state.greeting = "somthing";
-      this.setState({
-        movies: [
-          {
-            title: "HAPPY DEATH DAY",
-            poster:
-              "https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/Adventure_Time_cast.jpg/220px-Adventure_Time_cast.jpg"
-          },
-          {
-            title: "OLD BOY",
-            poster:
-              "https://img1.daumcdn.net/thumb/C216x312/?fname=http://i1.daumcdn.net/svc/image/U03/sdb/579174DA0263160002"
-          },
-          {
-            title: "STAR WORLDS",
-            poster:
-              "https://pbs.twimg.com/profile_images/1082834871943258112/vf6z0ow6_400x400.jpg"
-          },
-          {
-            title: "frozen",
-            poster:
-              "https://img1.daumcdn.net/thumb/C216x312/?fname=http://i1.daumcdn.net/svc/image/U03/sdb/579174DA0263160002"
-          }
-        ]
-        // movies: [
-        //   ...this.state.movies //기존 영화 리스트
-        // ]
-      });
-    }, 2000); //2초뒤 바뀐 greeting값 출력
+    //많은 함수를 부를것이기 때문에 이곳에 몰아넣는것은 좋지 못함. 그래서 나눠서 함수를 만듦.
+    this._getMovies();
   }
 
   _renderMovies = () => {
     const movies = this.state.movies.map((movies, index) => {
+      console.log(movies);
       return (
-        <Movie title={movies.title} poster={movies.poster} key={index} /> //컴포넌트가 많으면 유니크한 키값이 필요
+        <Movie
+          title={movies.title}
+          poster={movies.large_cover_image}
+          key={index}
+        /> //컴포넌트가 많으면 유니크한 키값이 필요
       );
     });
     return movies; //movies 에 데이터를 저장함.
+  };
+
+  _getMovies = async () => {
+    const movies = await this._callApi();
+    this.setState({
+      movies
+    });
+  };
+
+  _callApi = () => {
+    return fetch("https://yts.am/api/v2/list_movies.json?sort_by=like_conut")
+      .then(Response => Response.json()) //위 페치가 끝나면 실행 (function을 넣음, 1 attribute)
+      .then(json => json.data.movies) // '=>' 화살표에 리턴이 포함되어있음.
+      .catch(err => console.log(err)); //에러가 있으면 잡아
   };
 
   render() {
     return (
       <div className="App">
         {this.state.movies ? this._renderMovies() : "Loading..."}
-        {/* <Movie title={movieTitles[0]} poster={movieImages[0]} />
-        <Movie title={movieTitles[1]} poster={movieImages[1]} />
-        <Movie title={movieTitles[2]} poster={movieImages[2]} /> */}
       </div>
     );
   }
