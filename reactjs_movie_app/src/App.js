@@ -4,7 +4,6 @@ import Movie from "./Movie";
 
 class App extends Component {
   state = {};
-
   componentDidMount() {
     //많은 함수를 부를것이기 때문에 이곳에 몰아넣는것은 좋지 못함. 그래서 나눠서 함수를 만듦.
     this._getMovies();
@@ -12,12 +11,13 @@ class App extends Component {
 
   _renderMovies = () => {
     const movies = this.state.movies.map((movies, index) => {
-      console.log(movies);
       return (
         <Movie
-          title={movies.title}
-          poster={movies.large_cover_image}
-          key={index}
+          title={movies.title_english}
+          poster={movies.medium_cover_image}
+          key={movies.id} //인덱스를 사용하면 너무 느려질수 있음.
+          genres={movies.genres}
+          synopsis={movies.synopsis}
         /> //컴포넌트가 많으면 유니크한 키값이 필요
       );
     });
@@ -27,7 +27,7 @@ class App extends Component {
   _getMovies = async () => {
     const movies = await this._callApi();
     this.setState({
-      movies
+      movies //movies : movies  => 같기 때문에 한번만 써줌.
     });
   };
 
@@ -39,9 +39,10 @@ class App extends Component {
   };
 
   render() {
+    const { movies } = this.state;
     return (
-      <div className="App">
-        {this.state.movies ? this._renderMovies() : "Loading..."}
+      <div className={movies ? "App" : "App--loading"}>
+        {movies ? this._renderMovies() : "Loading"}
       </div>
     );
   }
