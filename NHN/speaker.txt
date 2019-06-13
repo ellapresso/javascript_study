@@ -76,7 +76,7 @@ nottodo.getTitle();
 this = window
 
 var getTitle = todo.getTitle;
-getTitle(); == window.getTitle(); //strict모드에서는 undifined
+getTitle(); == window.getTitle(); //strict모드에서는 undefined
 
 
 ## 이벤트 리스너 안에서의 this
@@ -88,9 +88,9 @@ element.addEventListener('click', function() {
 ::맨앞 element가 this.
 
 ::::누가 질문햇는데 질문을 이해하지 못하겠똬
-::::뷰 기준으로 데이타에서 게터나 특정 함수가 실행되기전에 지금 무슨함수가 실행되고 있는지
-글로벌에 넣어놓고( 그게 랜더일수도있음 템플릿쓸떄) 게터가 실행돠면 와쳐라는 모듈이
-뭐든 쓰이게 되면 게터가 실행이 되고 와쳐한테 게터가 알려줌 지금실행되는함수 나한테 관심잇다고 저장해놔알려주고
+::::VUE 기준으로 데이타에서 GETTER나 특정 함수가 실행되기전에 지금 무슨함수가 실행되고 있는지
+글로벌에 넣어놓고( 그게 랜더일수도있음 템플릿쓸떄) GETTER가 실행돠면 와쳐라는 모듈이
+뭐든 쓰이게 되면 게터가 실행이 되고 와쳐한테 GETTER가 알려줌 지금실행되는함수 나한테 관심잇다고 저장해놔알려주고
 실행한다면 유저가 뭔가 바꿔서 해당데이터가 바뀌면 세터가 실행되면서 와쳐한테말함
 그 아까 내가말한 목록그거 다시실행시켜 나바뀌엇쪙 뀨
 ::::리액트는 완전 다름 
@@ -98,3 +98,101 @@ element.addEventListener('click', function() {
 컴포넌트를 새로그려버림 변경점 생기면 위에서부터 싹다 참조가 바뀌엇는지 비교해서 바뀌엇으면 다시 그림
 데이터가 바뀌엇다면 참조가 바뀐것
 ::::앵귤러는 뷰에 가깝.....근데 강사님이 별로 안좋아함
+이맥스를 너무 좋아함.....
+근데 진짜 시작할때 소개부터 이맥스를 사랑하는...이라고...
+
+
+
+
+
+
+
+
+
+
+## this의 변조
+
+## Call, Apply - 1
+
+var todo = {
+  complete: false,
+  title: "자바스크립트 공부하기"
+}
+
+function setComplete(complete) {
+  this.complete = complete;
+  //이 this를 todo로 실행하고싶은거임.
+  //여기서는 안됨. 2 에서는 됨.
+}
+
+setComplete(true);
+
+window.complete === true;
+
+
+## Call, Apply - 2
+
+// call: 첫번째 인자 this로 만들 객체, 두번째 인자부터 함수에 전달할 인자
+setComplete.call(todo, true);
+// apply: 첫번째 인자 this로 만들 객체, 두번째 인자에 함수에 전달할 인자들을 배열로
+setComplete.apply(todo, [true]);
+
+
+## Bind
+
+:: 사람들이 만들어서 썼는데 많이들 써서 넣어짐.
+
+this가 특정 객체로 고정된 함수를 리턴
+::새로운함수를 리턴
+
+function setComplete(complete) {
+  this.complete = complete;
+::여기서의 this는 더이상 this가 아니다
+
+}
+
+::애로우펑션은 바인드와 같음.
+::바인드는 원하는 컨텐츠를 지정할 수 잇지만 에로우는 못함.
+::바인드보다 더 고차원적인게 애로우
+
+
+
+## 팩터리 함수
+
+::제이쿼리의 $가 팩터리 함수
+
+
+
+
+
+## 생성자
+
+::자바에서 가져온거임. 함수랑 다를것 없음
+::앞이 대문자로 시작함.
+::this를 이용해서 프로퍼티를 확장해나감.
+::new키워드로 인스턴스를 만듦.
+
+
+## new 연산자로 인한 내부 동작(1)
+
+
+// new없이 실행하면
+var person = Person('Steve Job');
+function Person(name) {
+  this = window //1. 객체와 실행된게 아니니 this는 window
+  this.name = name; //2. 함수의 코드를 실행
+  return undefined //3. 모든 함수는 리턴값이 없으면 undefined 리턴
+}
+::글로벌에 쓸데없이 name이란 프로퍼티 생김.
+::person은 undefined가됨
+
+
+## new 연산자로 인한 내부 동작(2)
+::리턴없어도 리턴해줌.
+
+
+
+## 객체 타입 비교
+::type of 객체는 다 object.자바스크립트 기본타입만 비교해주고 function은 구분해줌.
+
+

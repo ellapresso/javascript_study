@@ -30,3 +30,19 @@ Object.defineProperty(todo, 'state', {
         return this.complete ? '완료' : '미완료';
     }
 });
+
+var todo = {
+    complete: false,
+    title: '자바스크립트 공부하기'
+};
+
+function printTodo() {
+    return this.complete ? '완료 : ' + this.title : '미완료 : ' + this.title;
+}
+
+//call 이용
+printTodo.call(todo); //완료 : 자바스크립트 공부하기
+//bind 이용
+var newPrintTodo = printTodo.bind(todo);
+newPrintTodo(); //완료 : 자바스크립트 공부하기
+printTodo.bind(todo)(); //완료 : 자바스크립트 공부하기
