@@ -276,3 +276,69 @@ var b = {
 동일하게 갖는다.
 
 
+
+## 부모 생성자의 인스턴스 속성 상속 :LIVE
+
+function Parent(name) {
+  this.name = name;
+}
+
+function Child() {}
+Child.prototype = Object.create(Parent.prototype);
+::Object.create는 __proto__를 생성하는거다.
+
+
+// 생성자 빌려쓰기 ::실제 있는이름..:: 시전
+function Child(name) {
+  Parent.call(this, name);
+}
+
+var i = new Child('lime');
+
+
+
+## 메서드 오버라이드
+
+상속받은 메서드를 재정의
+
+
+
+
+## class 키워드 사용
+
+프로토타입과 생성자를 이용한 패턴을 쉽게 사용할 수 있도록 하는 편의 문법
+
+:: c#과 비슷한거 같은 느낌이라고함 : 강사피셜
+
+## 기본문법
+
+class Person {
+  // 생성자
+  constructor(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+  // 메소드
+  getFullName() {
+    return this.firstName + this.lastName;
+  } //이러면 프로토타입에 들어감.
+}
+
+
+## 쉬워진 상속
+
+::이전 설명들은 어떻게 되는건지 플로우 설명한거니까 알아야됨.
+
+class Child extends Parent {
+  // 생략 가능
+  constructor(name) {
+    super(name); //바로 위 부모를 사용할 수 있음.
+  }
+  getName() {
+    return super.getName() + '.Junior';
+  }
+}
+
+
+
+shiren@nhn.com 김성호 FE개발랩

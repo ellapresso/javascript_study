@@ -193,20 +193,30 @@ const gChild = Object.create(child);
 
 //생성자 기반 프로토타입 체인 상속(5) :LIVE:
 
-function Parent() {}
+function Parent() {
+    this.name = name;
+}
 Parent.prototype.ddd = 3;
 Parent.prototype.pMethod = function () {};
 
-function Child() {}
+function Child(name) {
+    Parent.call(this, name); //이걸 써줘야 p2에 name 생김? this는 빈객체
+
+    this.someChildNeeds = 'thisissomething';
+}
 Child.prototype = Object.create(Parent.prototype);
 Child.prototype.constructor = Child;
 Child.prototype.cMethod = function () {};
+
+function gChild(name) {
+    Child.call(this.name); //직계부모만 실행해주면됨. 그럼 그 직계부모가 그 부모를 실행하기때문. ::말이 왜이래
+}
 
 var p2 = new Child();
 
 
 
-//////
+////// 실습 10
 function Pr() {}
 Pr.prototype.ddd = 3;
 Pr.prototype.pMethod = function () {}
