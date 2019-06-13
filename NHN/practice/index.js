@@ -44,5 +44,5 @@ function printTodo() {
 printTodo.call(todo); //완료 : 자바스크립트 공부하기
 //bind 이용
 var newPrintTodo = printTodo.bind(todo);
-newPrintTodo(); //완료 : 자바스크립트 공부하기
-printTodo.bind(todo)(); //완료 : 자바스크립트 공부하기
+newPrintTodo(); //미완료 : 자바스크립트 공부하기
+printTodo.bind(todo)(); //미완료 : 자바스크립트 공부하기
