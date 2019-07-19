@@ -1,4 +1,4 @@
-//문자열 내 p와 y의 개수
+//문자열 내 p와 y의 개수 - 12916
 function solution(s) {
     var ya = /p/gi,
         pa = /y/gi;
@@ -11,7 +11,7 @@ function solution(s) {
     return (pl == yl);
 }
 
-//이상한 문자 만들기
+//이상한 문자 만들기 - 12930
 function solution(s) {
     var words = s.split(/ /, -1)
     var whole = ''
