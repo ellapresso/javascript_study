@@ -32,7 +32,7 @@ class App extends Component {
   };
 
   _callApi = () => {
-    return fetch("https://yts.am/api/v2/list_movies.json?sort_by=like_conut")
+    return fetch("https://yts.lt/api/v2/list_movies.json?sort_by=like_conut")
       .then(Response => Response.json()) //위 페치가 끝나면 실행 (function을 넣음, 1 attribute)
       .then(json => json.data.movies) // '=>' 화살표에 리턴이 포함되어있음.
       .catch(err => console.log(err)); //에러가 있으면 잡아
