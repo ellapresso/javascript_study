@@ -13,6 +13,6 @@
     "express": "^4.16.4",
     "jade": "^1.11.0",
     "node-mysql": "^0.4.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   }
 }
